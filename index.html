@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Cancer-Myth: Evaluating Large Language Models on Patient Questions with False Presuppositions">
+  <meta name="keywords" content="Medical benchmark, LLM evaluation, Medical agent, Adversarial generation, LLM sycophancy">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cancer-Myth: Evaluating Large Language Models on Patient Questions with False Presuppositions</title>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-179758052-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-179758052-1');
+  </script>
+
+  <script>
+    function updateSingleVideo() {
+      var demo = document.getElementById("single-menu-demos").value;
+      var task = document.getElementById("single-menu-tasks").value;
+      var inst = document.getElementById("single-menu-instances").value;
+
+      console.log("single", demo, task, inst)
+
+      var video = document.getElementById("multi-task-result-video");
+      video.src = "media/results/sim_rollouts/" +
+                  "n" +
+                  demo +
+                  "-" +
+                  task +
+                  "-" +
+                  inst +
+                  ".mp4"
+      video.playbackRate = 1.75;
+      video.play();
+    }
+
+    function updateQpredVideo() {
+      var task = document.getElementById("single-menu-qpred").value;
+
+      console.log("qpred", task)
+
+      var video = document.getElementById("q-pred-video");
+      video.src = "media/results/qpred/" +
+                  task +
+                  ".mp4"
+      video.playbackRate = 1.75;
+      video.play();
+    }
+
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <!-- <link rel="icon" href="./static/images/tifa.png"> -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body onload="updateSingleVideo(); updateQpredVideo();">
+  <!-- Google Tag Manager (noscript) -->
+  <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MFCT45H" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript> -->
+  <!-- End Google Tag Manager (noscript) -->
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Cancer-Myth: Evaluating Large Language Models on Patient Questions with False Presuppositions</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://billzhu.me">Wang Bill Zhu</a><sup>&#9824;&dagger;</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/tianqi-chen-27a722227">Tianqi Chen</a><sup>&#9824;&dagger;</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://uschemeoncfellowship.com/fellows1">Ching Hing Lin</a><sup>&#9825;&Dagger;</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://uschemeoncfellowship.com/fellows1">Jade Law</a><sup>&#9825;&Dagger;</sup>,
+            </span>
+            <br>
+            <span class="author-block">
+              <a href="https://uschemeoncfellowship.com/fellows1">Mazen Jizzini</a><sup>&#9825;&Dagger;</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://keck.usc.edu/faculty-search/jorge-nieva/">Jorge J. Nieva</a><sup>&#9825;</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://viterbi-web.usc.edu/~ruishanl/">Ruishan Liu</a><sup>&#9824;</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://robinjia.github.io">Robin Jia</a><sup>&#9824;</sup>,
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>&#9824; </sup>Thomas Lord Department of Computer Science, USC</span>&nbsp;&nbsp;
+            <span class="author-block"><sup>&#9825; </sup>Keck School of Medicine, USC</span>
+            <br>
+            <span style="font-size:small"><sup>&dagger; </sup><i>Equal contribution, </i><sup>&Dagger; </sup><i>Equal contribution</i></span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/xxxxx"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+        		
+              <!-- Data Link. -->
+              <span class="link-block">
+                <span class="button-wrapper">
+                  <a href="https://huggingface.co/datasets/Cancer-Myth/Cancer-Myth"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <i style="font-size: small" class="fa fa-database"></i> 
+                    <span>&nbsp;Data</span>
+                  </a>
+                </span>
+              </span>
+
+              <!-- Video Link. -->
+<!--              <span class="link-block">-->
+<!--                <span class="button-wrapper">-->
+<!--                  <a class="external-link button is-normal is-rounded is-dark">-->
+<!--                    <i style="font-size: small" class="fa fa-database"></i> -->
+<!--                    <span>&nbsp;Slides (Coming Soon)</span>-->
+<!--                  </a>-->
+<!--                </span>-->
+<!--              </span>-->
+              
+              <!-- Code Link. -->
+              <span class="link-block">
+                <span class="button-wrapper">
+                  <a class="external-link button is-normal is-rounded is-dark">
+                    <i style="font-size: small" class="fa fa-database"></i> 
+                    <span>&nbsp;Code</span>
+                  </a>
+                </span>
+              </span>
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <div style="text-align: center;"><br/>
+        <img src="./static/images/cancer_myth_category.jpg" alt="rd_teaser" width="100%" class="center">
+      </div>
+      <h2 class="subtitle has-text-centered" style="max-width:870px;">
+        <br>
+        While current LLM responses can offer helpful medical information, they often <b>fail to address false presuppositions</b> in patient questions,
+        which may lead to <b>delays in or avoidance of effective care</b>.
+        LLMs should also provide corrective information (highlighted in red) to help patients recognize and understand their misconceptions.
+        We develop <span style="color: rgb(153, 27, 30);"><b>Cancer-Myth</b>, a dataset of 585 patient questions with false presuppositions, to evaluate how well LLMs and medical agents handle embedded misconceptions.
+        <br>
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="abstract">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h3 class="title is-3 has-text-centered">Abstract</h3>
+        <div class="column content has-text-justified">
+          <p>
+            Cancer patients are increasingly turning to large language models (LLMs) as a new form of internet search for medical information, making it critical to assess how well these models handle complex, personalized questions.
+            However, current medical benchmarks focus on medical exams or consumer-searched questions and do not evaluate LLMs on real patient questions with detailed clinical contexts.
+            In this paper, we first evaluate LLMs on cancer-related questions drawn from real patients, reviewed by three hematology oncology physicians.
+            While responses are generally accurate, with GPT-4-Turbo scoring 4.13 out of 5, the models frequently fail to recognize or address false presuppositions in the questions—posing risks to safe medical decision-making.
+            To study this limitation systematically, we introduce Cancer-Myth, an expert-verified adversarial dataset of 585 cancer-related questions with false presuppositions.
+            On this benchmark, no frontier LLM --- including GPT-4o, Gemini-1.5-Pro, and Claude-3.5-Sonnet --- corrects these false presuppositions more than 30% of the time.
+            Even advanced medical agentic methods do not prevent LLMs from ignoring false presuppositions.
+            These findings expose a critical gap in the clinical reliability of LLMs and underscore the need for more robust safeguards in medical AI systems.
+          </p>
+        </div>
+      </div>
+    </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Pilot study. -->
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+          <h3 class="title is-3 has-text-centered">LLM Responses to Real Patient Questions</h3>
+          <div class="column content has-text-justified">
+            <p>
+              xxx.
+            </p>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container is-max-desktop">
+    <!-- Method. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h3 class="title is-3 has-text-centered">Dataset Creation</h3>
+        <div class="column content has-text-justified">
+          <p>
+            Then, we discuss training and inference for student models to <span style="color: rgb(153, 27, 30);"><b>predict the rationale and the answer</b></span>.<br>
+          </p><br>
+        </div>
+        <img src="./static/images/cancer_myth_pipeline.jpg" alt="pipeline" width="100%" class="center">
+        <div class="column content has-text-justified">
+          <p>
+            Examples of questions with false presuppositions and their corresponding rationales.
+          </p><br>
+        </div>
+        <img src="./static/images/cancer_myth_category.jpg" alt="cat_example" width="100%" class="center">
+        <div class="column content has-text-justified">
+          <p>
+            Data distribution of the Cancer-Myth dataset.
+          </p><br>
+        </div>
+        <img src="./static/images/category_distribution.png" alt="cat_dist" width="50%" class="center">
+        <img src="./static/images/model_distribution.png" alt="cat_dist" width="50%" class="center">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h3 class="title is-3 has-text-centered">Results</h3>
+        <div class="column content has-text-justified">
+          <p>
+            RD shows consistent improvements on InfoVQA <span style="color: rgb(153, 27, 30);"><b>(+4.0)</b></span>, DocVQA <span style="color: rgb(153, 27, 30);"><b>(+4.6)</b></span> and ChartQA-human <span style="color: rgb(153, 27, 30);"><b>(+7.7)</b></span> test sets, for the base Pix2Struct models. <span style="color: rgb(153, 27, 30);"><b>Similar improvements hold also on large Pix2Struct models</b></span>.
+          </p>
+        </div>
+        <img src="./static/images/pcs_distribution.png" alt="main_results" width="70%" class="center">
+        <div class="column content has-text-justified">
+          <p>
+            Cross-model analysis reveals asymmetries in adversarial effectiveness.
+          </p>
+        </div>
+        <img src="./static/images/cross_model.png" alt="cross_model" width="40%" class="center">
+        <div class="column content has-text-justified">
+          <p>
+            Models fail consistently on questions related to limited treatments and inevitable side effects.
+          </p>
+        </div>
+        <img src="./static/images/model_category_results.png" alt="model_category" width="100%" class="center">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>,
+}</code></pre>
+  </div>
+</section>
+
+
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
+            we just ask that you link back to this page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

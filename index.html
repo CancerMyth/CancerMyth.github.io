@@ -53,6 +53,7 @@
 
   </script>
 
+  <link rel="icon" href="./static/images/cancer_myth_avatar.jpg" type="image/png">
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
         rel="stylesheet">
 
@@ -128,7 +129,7 @@
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
                   </span>
-                  <span>arXiv</span>
+                  <span>Paper</span>
                 </a>
               </span>
         		
@@ -156,7 +157,8 @@
               <!-- Code Link. -->
               <span class="link-block">
                 <span class="button-wrapper">
-                  <a class="external-link button is-normal is-rounded is-dark">
+                  <a href="https://github.com/Bill1235813/cancer-myth"
+                     class="external-link button is-normal is-rounded is-dark">
                     <i style="font-size: small" class="fa fa-database"></i> 
                     <span>&nbsp;Code</span>
                   </a>
@@ -177,14 +179,14 @@
   <div class="container is-max-desktop">
     <div class="hero-body">
       <div style="text-align: center;"><br/>
-        <img src="./static/images/cancer_myth_category.jpg" alt="rd_teaser" width="100%" class="center">
+        <img src="./static/images/cancer_myth_teaser.png" alt="rd_teaser" width="90%" class="center">
       </div>
-      <h2 class="subtitle has-text-centered" style="max-width:870px;">
+      <h2 class="subtitle" style="margin: 0 auto; text-align: left; max-width:800px;">
         <br>
         While current LLM responses can offer helpful medical information, they often <b>fail to address false presuppositions</b> in patient questions,
         which may lead to <b>delays in or avoidance of effective care</b>.
-        LLMs should also provide corrective information (highlighted in red) to help patients recognize and understand their misconceptions.
-        We develop <span style="color: rgb(153, 27, 30);"><b>Cancer-Myth</b>, a dataset of 585 patient questions with false presuppositions, to evaluate how well LLMs and medical agents handle embedded misconceptions.
+        LLMs should also provide corrective information (<span style="color: rgb(153, 27, 30);">red</span>) to help patients recognize and understand their misconceptions.
+        We develop <span style="color: rgb(54, 89, 163);"><b>Cancer-Myth</b></span>, a dataset of 585 patient questions with false presuppositions, to evaluate how well LLMs and medical agents handle embedded misconceptions.
         <br>
       </h2>
     </div>
@@ -202,9 +204,9 @@
             Cancer patients are increasingly turning to large language models (LLMs) as a new form of internet search for medical information, making it critical to assess how well these models handle complex, personalized questions.
             However, current medical benchmarks focus on medical exams or consumer-searched questions and do not evaluate LLMs on real patient questions with detailed clinical contexts.
             In this paper, we first evaluate LLMs on cancer-related questions drawn from real patients, reviewed by three hematology oncology physicians.
-            While responses are generally accurate, with GPT-4-Turbo scoring 4.13 out of 5, the models frequently fail to recognize or address false presuppositions in the questions—posing risks to safe medical decision-making.
-            To study this limitation systematically, we introduce Cancer-Myth, an expert-verified adversarial dataset of 585 cancer-related questions with false presuppositions.
-            On this benchmark, no frontier LLM --- including GPT-4o, Gemini-1.5-Pro, and Claude-3.5-Sonnet --- corrects these false presuppositions more than 30% of the time.
+            While responses are generally accurate, with GPT-4-Turbo scoring 4.13 out of 5, <b>the models frequently fail to recognize or address false presuppositions</b> in the questions-posing risks to safe medical decision-making.
+            To study this limitation systematically, we introduce <span style="color: rgb(54, 89, 163);"><b>Cancer-Myth</b></span>, an expert-verified adversarial dataset of 585 cancer-related questions with false presuppositions.
+            On this benchmark, no frontier LLM — including GPT-4o, Gemini-1.5-Pro, and Claude-3.5-Sonnet — corrects these false presuppositions more than 30% of the time.
             Even advanced medical agentic methods do not prevent LLMs from ignoring false presuppositions.
             These findings expose a critical gap in the clinical reliability of LLMs and underscore the need for more robust safeguards in medical AI systems.
           </p>
@@ -220,11 +222,19 @@
     <div class="columns is-centered">
       <div class="column is-four-fifths">
           <h3 class="title is-3 has-text-centered">LLM Responses to Real Patient Questions</h3>
+          <h5 class="title is-5 has-text-centered">
+            Helpfulness&nbsp; <span style="color: green;">✅</span>&nbsp;&nbsp;&nbsp;  Presupposition Correction&nbsp; <img src="./static/images/cross-mark-button.png" alt="Red X" style="width: 24px; vertical-align: middle;">
+          </h5>
           <div class="column content has-text-justified">
             <p>
-              xxx.
+              We selected 25 oncology-related questions from <a href="https://cancercare.org/questions">CancerCare's website</a>, focusing specifically on treatment advice and side effects that require medical expertise.
+              Three oncology physicians evaluated answers provided by three leading language models (GPT-4-Turbo, Gemini-1,5-Pro, Llama-3.1-405B) and human medical social workers, assessing each response at both the overall and paragraph levels.
+              Frontier language models generally <span><b>outperformed human social workers</b></span>, though physicians noted LLM answers were often overly generic and <span><b>frequently failed to correct false assumptions embedded in patient questions</b></span>.
+              Such uncorrected misconceptions pose significant risks to patient safety in medical contexts.
+              However, there is currently insufficient data to systematically evaluate this issue, motivating the creation of our specialized Cancer-Myth dataset.
             </p>
           </div>
+          <img src="./static/images/combined_prelim.png" alt="pilot" width="100%" class="center"><br><br>
       </div>
     </div>
   </div>
@@ -236,23 +246,28 @@
         <h3 class="title is-3 has-text-centered">Dataset Creation</h3>
         <div class="column content has-text-justified">
           <p>
-            Then, we discuss training and inference for student models to <span style="color: rgb(153, 27, 30);"><b>predict the rationale and the answer</b></span>.<br>
-          </p><br>
+            To evaluate LLM and medical agent performance in handling patient questions with embedded misconceptions, we compile a collection of <b>994</b> common cancer myths and develop an adversarial <span style="color: rgb(54, 89, 163);"><b>Cancer-Myth</b></span> of <b>585</b> examples.
+            We initialized the adversarial datasets with a few failure examples from our previous CancerCare study.
+            Using an LLM generator, we created patient questions for each myth, integrating false presuppositions with complex patient details to challenge the models.
+            The LLM responder answers these questions, while a verifier evaluates the response’s ability to address false presuppositions effectively.
+            Responses that fail to correct the presuppositions are added to the adversarial set, while successful ones are placed in the non-adversarial set, for use in subsequent generator prompting rounds.
+          </p>
         </div>
-        <img src="./static/images/cancer_myth_pipeline.jpg" alt="pipeline" width="100%" class="center">
+        <img src="./static/images/cancer_myth_pipeline.jpg" alt="pipeline" width="100%" class="center"><br><br>
         <div class="column content has-text-justified">
           <p>
-            Examples of questions with false presuppositions and their corresponding rationales.
-          </p><br>
+            We perform three separate runs over the entire set of myths, each targeting GPT-4o, Gemini-1.5-Pro, and Claude-3.5-Sonnet, respectively.
+            The generated questions are <b>categorized into 7 categories (as below)</b>, and then finally reviewed by physicians to ensure their relevance and reliability.
+          </p>
         </div>
-        <img src="./static/images/cancer_myth_category.jpg" alt="cat_example" width="100%" class="center">
+        <img src="./static/images/cancer_myth_category.jpg" alt="cat_example" width="100%" class="center"><br><br>
         <div class="column content has-text-justified">
           <p>
-            Data distribution of the Cancer-Myth dataset.
-          </p><br>
+            The statistics of categories and data generators in <span style="color: rgb(54, 89, 163);"><b>Cancer-Myth</b></span> are listed below.
+          </p>
         </div>
-        <img src="./static/images/category_distribution.png" alt="cat_dist" width="50%" class="center">
-        <img src="./static/images/model_distribution.png" alt="cat_dist" width="50%" class="center">
+        <img src="./static/images/category_distribution.png" alt="cat_dist" width="75%" class="center"><br><br>
+        <img src="./static/images/model_distribution.png" alt="cat_dist" width="75%" class="center">
       </div>
     </div>
   </div>
@@ -266,16 +281,16 @@
         <h3 class="title is-3 has-text-centered">Results</h3>
         <div class="column content has-text-justified">
           <p>
-            RD shows consistent improvements on InfoVQA <span style="color: rgb(153, 27, 30);"><b>(+4.0)</b></span>, DocVQA <span style="color: rgb(153, 27, 30);"><b>(+4.6)</b></span> and ChartQA-human <span style="color: rgb(153, 27, 30);"><b>(+7.7)</b></span> test sets, for the base Pix2Struct models. <span style="color: rgb(153, 27, 30);"><b>Similar improvements hold also on large Pix2Struct models</b></span>.
+            Shows xxx.
           </p>
         </div>
-        <img src="./static/images/pcs_distribution.png" alt="main_results" width="70%" class="center">
+        <img src="./static/images/pcs_distribution.png" alt="main_results" width="90%" class="center"><br>
         <div class="column content has-text-justified">
           <p>
             Cross-model analysis reveals asymmetries in adversarial effectiveness.
           </p>
         </div>
-        <img src="./static/images/cross_model.png" alt="cross_model" width="40%" class="center">
+        <img src="./static/images/cross_model.png" alt="cross_model" width="50%" class="center"><br>
         <div class="column content has-text-justified">
           <p>
             Models fail consistently on questions related to limited treatments and inevitable side effects.

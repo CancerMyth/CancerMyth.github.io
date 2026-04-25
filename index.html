@@ -208,14 +208,15 @@
         <h3 class="title is-3 has-text-centered">Abstract</h3>
         <div class="column content has-text-justified">
           <p>
-            Cancer patients are increasingly turning to large language models (LLMs) as a new form of internet search for medical information, making it critical to assess how well these models handle complex, personalized questions.
-            However, current medical benchmarks focus on medical exams or consumer-searched questions and do not evaluate LLMs on real patient questions with detailed clinical contexts.
-            In this paper, we first evaluate LLMs on cancer-related questions drawn from real patients, reviewed by three hematology oncology physicians.
-            While responses are generally accurate, with GPT-4-Turbo scoring 4.13 out of 5, <b>the models frequently fail to recognize or address false presuppositions</b> in the questions-posing risks to safe medical decision-making.
-            To study this limitation systematically, we introduce <span style="color: rgb(54, 89, 163);"><b>Cancer-Myth</b></span>, an expert-verified adversarial dataset of 585 cancer-related questions with false presuppositions.
-            On this benchmark, no frontier LLM — including GPT-4o, Gemini-1.5-Pro, and Claude-3.5-Sonnet — corrects these false presuppositions more than 30% of the time.
-            Even advanced medical agentic methods do not prevent LLMs from ignoring false presuppositions.
-            These findings expose a critical gap in the clinical reliability of LLMs and underscore the need for more robust safeguards in medical AI systems.
+            Cancer patients are increasingly turning to large language models (LLMs) for medical information, making it critical to assess how well these models handle complex, personalized questions.
+            However, current medical benchmarks focus on medical exams or consumer-searched questions and do not evaluate LLMs on real patient questions with patient details.
+            In this paper, we first have three hematology-oncology physicians evaluate cancer-related questions drawn from real patients.
+            While LLM responses are generally accurate, the models frequently <b>fail to recognize or address false presuppositions</b> in the questions, posing risks to safe medical decision-making.
+            To study this limitation systematically, we introduce <span style="color: rgb(54, 89, 163);"><b>Cancer-Myth</b></span>, an expert-verified adversarial dataset of <b>585</b> cancer-related questions with false presuppositions.
+            On this benchmark, no frontier LLM — including GPT-5, Gemini-2.5-Pro, and Claude-4-Sonnet — corrects these false presuppositions more than <b>43%</b> of the time.
+            To study mitigation strategies, we further construct a 150-question <span style="color: rgb(54, 89, 163);"><b>Cancer-Myth-NFP</b></span> set, in which physicians confirm the absence of false presuppositions.
+            We find typical mitigation strategies, such as adding precautionary prompts with GEPA optimization, can raise accuracy on Cancer-Myth to <b>80%</b>, but at the cost of misidentifying presuppositions in <b>41%</b> of Cancer-Myth-NFP questions and causing a <b>10%</b> relative performance drop on other medical benchmarks.
+            These findings highlight a critical gap in the reliability of LLMs, show that prompting alone is not a reliable remedy for false presuppositions, and underscore the need for more robust safeguards in medical AI systems.
           </p>
         </div>
       </div>
@@ -256,18 +257,19 @@
             To evaluate LLM and medical agent performance in handling patient questions with embedded misconceptions, we compile a collection of <b>994</b> common cancer myths and develop an adversarial <span style="color: rgb(54, 89, 163);"><b>Cancer-Myth</b></span> of <b>585</b> examples.
             We initialized the adversarial datasets with a few failure examples from our previous CancerCare study.
             Using an LLM generator, we created patient questions for each myth, integrating false presuppositions with complex patient details to challenge the models.
-            The LLM responder answers these questions, while a verifier evaluates the response’s ability to address false presuppositions effectively.
+            The LLM responder answers these questions, while a verifier evaluates the response's ability to address false presuppositions effectively.
             Responses that fail to correct the presuppositions are added to the adversarial set, while successful ones are placed in the non-adversarial set, for use in subsequent generator prompting rounds.
           </p>
         </div>
-        <img src="./static/images/cancer_myth_pipeline.jpg" alt="pipeline" width="100%" class="center"><br><br>
+        <img src="./static/images/cancer_myth_pipeline.png" alt="pipeline" width="100%" class="center"><br><br>
         <div class="column content has-text-justified">
           <p>
             We perform three separate runs over the entire set of myths, each targeting GPT-4o, Gemini-1.5-Pro, and Claude-3.5-Sonnet, respectively.
             The generated questions are <b>categorized into 7 categories (as below)</b>, and then finally reviewed by physicians to ensure their relevance and reliability.
+            During this process, we also collect a <b>150-question <span style="color: rgb(54, 89, 163);">Cancer-Myth-NFP</span></b> set—questions that LLMs flagged as containing false presuppositions but that physicians confirmed contain <b>no false presuppositions</b>. This set lets us measure how often a mitigation strategy <em>over-corrects</em> on benign questions.
           </p>
         </div>
-        <img src="./static/images/cancer_myth_category.jpg" alt="cat_example" width="100%" class="center"><br><br>
+        <img src="./static/images/cancer_myth_category.png" alt="cat_example" width="100%" class="center"><br><br>
         <div class="column content has-text-justified">
           <p>
             The statistics of categories and data generators in <span style="color: rgb(54, 89, 163);"><b>Cancer-Myth</b></span> are listed below.
@@ -297,9 +299,10 @@
         </ul>
         <p>
           We compute two metrics: the average <strong>Presupposition Correction Score (PCS)</strong> and the proportion of fully corrected answers, <strong>Presupposition Correction Rate (PCR)</strong>.
+          We evaluate <strong>17 models</strong> across the GPT, Claude, Gemini, DeepSeek, LLaMA, and Qwen families—including the latest reasoning models (GPT-5, Gemini-2.5-Pro, Claude-4-Sonnet, O3, O4-mini, DeepSeek-R1)—plus the multi-agent medical framework <strong>MDAgents</strong>.
         </p>
         <p>
-          Our findings show that <strong>Gemini-1.5-Pro</strong> performs best overall, but <strong>no frontier LLM</strong> corrects false presuppositions in patient questions in more than <strong>30%</strong> of cases. Additionally, multi-agent medical collaboration (<strong>MDAgents</strong>) does not prevent LLMs from overlooking false presuppositions.
+          <strong>GPT-5</strong> performs best with a PCR of <strong>42.1%</strong>, closely followed by <strong>Gemini-2.5-Pro</strong> (41.4%) and <strong>Claude-4-Sonnet</strong> (40.0%). Still, <strong>no frontier LLM</strong> corrects false presuppositions in more than <strong>43%</strong> of cases. Surprisingly, GPT-4o achieves only 5.8% PCR despite being strong at general medical QA, and <strong>MDAgents</strong> performs <em>worse</em> than standalone GPT-4o—agent-based orchestration does not prevent LLMs from overlooking false presuppositions.
         </p>
         </div>
         <img src="./static/images/pcs_distribution.png" alt="main_results" width="90%" class="center"><br>
@@ -328,14 +331,67 @@
 </section>
 
 
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h3 class="title is-3 has-text-centered">Mitigation Strategies and the Over-Correction Tradeoff</h3>
+        <div class="column content has-text-justified">
+          <p>
+            Can we just <em>tell</em> the model to watch out for false presuppositions? We evaluate two mitigation strategies:
+          </p>
+          <ul>
+            <li><strong>GEPA-optimized precautionary prompts</strong>—reflective prompt evolution over a mix of 7 medical benchmarks (<span style="color: rgb(54, 89, 163);">Cancer-Myth</span>, <span style="color: rgb(54, 89, 163);">Cancer-Myth-NFP</span>, MedQA, PubMedQA, SymCat, Medbullets, Craft-MD).</li>
+            <li><strong>Monitoring agent</strong>—an extra precautionary agent added to the MDAgents workflow.</li>
+          </ul>
+          <p>
+            The <span style="color: rgb(54, 89, 163);"><b>Cancer-Myth-NFP</b></span> set is critical here: it lets us measure whether a mitigation has merely made the model <em>over-cautious</em>, flagging false presuppositions where there are none.
+          </p>
+          <p>
+            GEPA pushes Gemini-2.5-Pro from 41% to <strong>88%</strong> on Cancer-Myth, but its accuracy on Cancer-Myth-NFP <strong>collapses from 96% to 68%</strong>, with <b>5–15%</b> relative drops on the other medical benchmarks. The monitoring agent is even more extreme: GPT-4o w/ MDAgents jumps from 2% to 81% on Cancer-Myth, but its NFP accuracy <b>crashes from 90% to 35%</b>—it now flags false presuppositions in <em>most</em> benign questions. Prompting alone is not a reliable remedy.
+          </p>
+        </div>
+        <div class="column content has-text-justified" style="overflow-x:auto;">
+        <table style="margin: 0 auto; border-collapse: collapse; font-size: 14px;">
+          <thead>
+            <tr style="border-bottom: 2px solid #333;">
+              <th style="padding: 6px 10px; text-align:left;">Model</th>
+              <th style="padding: 6px 10px; text-align:left;">Method</th>
+              <th style="padding: 6px 10px;">Cancer-Myth ↑</th>
+              <th style="padding: 6px 10px;">Cancer-Myth-NFP ↑</th>
+              <th style="padding: 6px 10px;">MedQA</th>
+              <th style="padding: 6px 10px;">PubMedQA</th>
+              <th style="padding: 6px 10px;">SymCat</th>
+              <th style="padding: 6px 10px;">Medbullets</th>
+              <th style="padding: 6px 10px;">Craft-MD</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding: 4px 10px;" rowspan="2">GPT-4o</td><td style="padding: 4px 10px;">Plain</td><td style="padding: 4px 10px; text-align:center;">12</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">88</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">70</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">67</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">70</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">68</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">55</td></tr>
+            <tr style="border-bottom: 1px solid #ccc;"><td style="padding: 4px 10px;">+ GEPA</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">68</td><td style="padding: 4px 10px; text-align:center;">59</td><td style="padding: 4px 10px; text-align:center;">63</td><td style="padding: 4px 10px; text-align:center;">59</td><td style="padding: 4px 10px; text-align:center;">61</td><td style="padding: 4px 10px; text-align:center;">62</td><td style="padding: 4px 10px; text-align:center;">46</td></tr>
+            <tr><td style="padding: 4px 10px;" rowspan="2">Gemini-2.5-Pro</td><td style="padding: 4px 10px;">Plain</td><td style="padding: 4px 10px; text-align:center;">41</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">96</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">92</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">82</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">91</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">80</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">68</td></tr>
+            <tr style="border-bottom: 1px solid #ccc;"><td style="padding: 4px 10px;">+ GEPA</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">88</td><td style="padding: 4px 10px; text-align:center;">68</td><td style="padding: 4px 10px; text-align:center;">85</td><td style="padding: 4px 10px; text-align:center;">78</td><td style="padding: 4px 10px; text-align:center;">87</td><td style="padding: 4px 10px; text-align:center;">72</td><td style="padding: 4px 10px; text-align:center;">58</td></tr>
+            <tr><td style="padding: 4px 10px;" rowspan="2">GPT-4o w/ MDAgents</td><td style="padding: 4px 10px;">Plain</td><td style="padding: 4px 10px; text-align:center;">2</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">90</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">89</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">77</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">91</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">82</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">66</td></tr>
+            <tr><td style="padding: 4px 10px;">+ Monitor</td><td style="padding: 4px 10px; text-align:center; color:#1a4fb8; font-weight:bold;">81</td><td style="padding: 4px 10px; text-align:center;">35</td><td style="padding: 4px 10px; text-align:center;">86</td><td style="padding: 4px 10px; text-align:center;">73</td><td style="padding: 4px 10px; text-align:center;">89</td><td style="padding: 4px 10px; text-align:center;">80</td><td style="padding: 4px 10px; text-align:center;">63</td></tr>
+          </tbody>
+        </table>
+        <p style="text-align:center; font-size: 13px; margin-top: 8px;"><em>GEPA and agent-based precaution improve Cancer-Myth accuracy but reduce performance on every other benchmark, especially Cancer-Myth-NFP.</em></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@article{zhu2025cancermythevaluatingaichatbot,
-    title={{C}ancer-{M}yth: Evaluating AI Chatbot on Patient Questions with False Presuppositions},
+    <pre><code>@inproceedings{zhu2026cancermyth,
+    title={{C}ancer-{M}yth: Evaluating Large Language Models on Patient Questions with False Presuppositions},
     author={Wang Bill Zhu and Tianqi Chen and Xinyan Velocity Yu and Ching Ying Lin and Jade Law and Mazen Jizzini and Jorge J. Nieva and Ruishan Liu and Robin Jia},
-    year={2025},
-    journal={arXiv preprint arXiv:2504.11373}
+    booktitle={The Fourteenth International Conference on Learning Representations (ICLR)},
+    year={2026},
+    url={https://arxiv.org/abs/2504.11373}
 }</code></pre>
   </div>
 </section>
